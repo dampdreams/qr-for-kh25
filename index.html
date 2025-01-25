@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #qrCanvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Registration - QR Code Generator</h1>
+    <p>Enter your unique ID to generate your QR code:</p>
+    <form id="qrForm">
+        <input type="text" id="uniqueID" placeholder="Enter Unique ID" required>
+        <button type="button" onclick="generateQR()">Generate QR Code</button>
+    </form>
+    <canvas id="qrCanvas"></canvas>
+    <p id="errorMessage" style="color: red;"></p>
+
+    <script>
+        function validateUniqueID(id) {
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            return regex.test(id);
+        }
+
+        function generateQR() {
+            const uniqueID = document.getElementById('uniqueID').value;
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = '';
+
+            if (!validateUniqueID(uniqueID)) {
+                errorMessage.textContent = "Invalid Unique ID! Must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 symbol, and be at least 8 characters long.";
+                return;
+            }
+
+            const qr = new QRious({
+                element: document.getElementById('qrCanvas'),
+                value: uniqueID,
+                size: 200
+            });
+        }
+    </script>
+</body>
+</html>
